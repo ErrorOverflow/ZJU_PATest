@@ -14,7 +14,7 @@ int find(map<int,double>::iterator low,map<int,double>::iterator high){
 	map<int,double>::iterator p;
 	map<int,double>::iterator q;
 	double cheap=999999,next;
-	cout<<low->first<<" "<<high->first<<endl;
+	//cout<<low->first<<" "<<high->first<<" "<<total<<endl;
 	if(low==high){
 		return 0;
 	}
@@ -27,27 +27,25 @@ int find(map<int,double>::iterator low,map<int,double>::iterator high){
 		iter++;
 	}
 	find(low,itmin);
-	iter=high;
-	iter--;
-	if(iter->first-itmin->first<=ALL){
-		total+=(iter->first-itmin->first)/davg*itmin->second;
+	if(high->first-itmin->first<=ALL){
+		total+=(high->first-itmin->first)/davg*itmin->second;
+		//cout<<itmin->first<<"->"<<high->first<<" "<<total<<endl;
 		return 0;
 	}
 	total+=capa*itmin->second;
 	p=itmin;
-	p++;
 	q=high;
-	q--;
 	while(true){
 		p++;
 		if(p==q){
 			p--;
-			printf("The maximum travel distance = %.4lf",p->first+ALL);
+			printf("The maximum travel distance = %.2lf",p->first+ALL);
 			exit(0);
 		}
 		p--;
 		cheap=999999;
 		iter=p;
+		iter++;
 		while(iter!=q){
 			if(iter->second<cheap){
 				itmin=iter;
@@ -55,12 +53,10 @@ int find(map<int,double>::iterator low,map<int,double>::iterator high){
 			}
 			iter++;
 		}
-		if(q->second<cheap){
-			itmin=q;
-			cheap=q->second;
-		}
+		//cout<<p->first<<"->"<<itmin->first<<" "<<total<<endl;
 		if(q->first-itmin->first<=ALL){
 			total+=((q->first-itmin->first)/davg-(capa-(itmin->first-p->first)/davg))*itmin->second;
+			//cout<<itmin->first<<"->"<<q->first<<" "<<total<<endl;
 			return 0;
 		}
 		total+=(itmin->first-p->first)/davg*itmin->second;
@@ -79,11 +75,7 @@ int main(){
 		cin>>pri>>dis;
 		station.insert(pair<int,double>(dis,pri));
 	}
-	mid=find(station.begin(),station.end());
-	if(mid==0){
-		return 0;
-	}else{
-		printf("%.2lf",total);
-	}
+	mid=find(station.begin(),--station.end());
+	printf("%.2lf",total);
 	return 0;
 }
