@@ -1,15 +1,15 @@
 #include<iostream>
-#include<set>
 #include<map>
-#include<vector>
 #include<string>
+#include<set>
+#include<vector>
 using namespace std;
 
 int N,K;
 
 struct Car{
-	vector<int> in;
-	vector<int> out;
+	map<int,int> inout;
+	vector<int> real;
 };
 
 int timechange(string t){
@@ -40,10 +40,8 @@ int display(int t){
 int main(){
 	int i,j,now;
 	string t,id,state;
-	vector<int> time;
 	map<string,Car> record;
-	map<string,int> stoptime;
-	map<string,bool> isLegal;
+	map<int,int> maptmp;
 	cin>>N>>K;
 	for(i=0;i<N;i++){
 		cin>>id>>t>>state;
@@ -51,13 +49,70 @@ int main(){
 			record.insert(pair<string,Car>(id,Car{}));
 		}
 		if(state=="in"){
-			record.find(id)->second.in.push_back(timechange(t));
+			record.find(id)->second.inout.insert(pair<int,int>(timechange(t),0));
 		}else{
-			if(record.find(id)->second.in.size()==0){
-				
-			}
-			record.find(id)->second.out.push_back(timechange(t));
+			record.find(id)->second.inout.insert(pair<int,int>(timechange(t),1));
 		}
 	}
+	for(auto iter=record.begin();iter!=record.end();iter++){
+		bool isLegal=false;
+		int pair;
+		int flag=0;
+		for(auto it=iter->second.inout.begin();it!=iter->second.inout.end();it++){
+			if(flag){
+				if(it->second==0){
+					pair=it->first;
+				}else{
+					iter->second.real.push_back(pair);
+					iter->second.real.push_back(it->first);
+					flag=0;
+				}
+			}else{
+				if(it->second==0){
+					pair=it->first;
+					flag=1;
+				}
+			}
+		}
+	}
+	for(i=0;i<K;i++){
+		cin>>t;
+		now=timechange(t);
+		int cars=0;
+		for(auto iter=record.begin();iter!=record.end();iter++){
+			for(auto it=iter->second.real.begin();it!=iter->second.real.end();it++){
+				if(*it<=now){
+					it++;
+					if(*it>now){
+						cars++;
+						break;						
+					}
+				}
+			}
+		}
+		cout<<cars<<endl;
+	}
+	int maxt=0;
+	int stop=0;
+	set<string> res;
+	for(auto iter=record.begin();iter!=record.end();iter++){
+		stop=0;
+		for(auto it=iter->second.real.begin();it!=iter->second.real.end();it++){
+			stop-=*it;
+			it++;
+			stop+=*it;
+		}
+		if(stop>=maxt){
+			if(stop>maxt){
+				maxt=stop;
+				res.clear();
+			}
+			res.insert(iter->first);
+		}
+	}
+	for(auto iter=res.begin();iter!=res.end();iter++){
+		cout<<*iter<<" ";
+	}
+	display(maxt);
 	return 0;
 } 
