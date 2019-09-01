@@ -1,21 +1,23 @@
 #include<iostream>
-#include<set> 
-
+#include<vector>
+#include<algorithm>
 using namespace std;
 
-set<int> list;
+int N;
+vector<int> list;
 
 int main(){
-	int i,N,tmp,root;
+	int i;
 	cin>>N;
+	list.resize(N);
 	for(i=0;i<N;i++){
-		cin>>tmp;
-		if(i==0){
-			root=tmp;
-		}
-		list.insert(tmp);
-		
+		cin>>list[i];
 	}
-	cout<<root;
+	sort(list.begin(),list.end());
+	if(N%2==0){
+		cout<<list[N/2];
+	}else{
+		cout<<list[N/2];
+	}
 	return 0;
-} 
+}
