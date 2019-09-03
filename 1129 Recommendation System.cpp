@@ -1,33 +1,41 @@
 #include<iostream>
-#include<map>
+#include<vector>
+#include<algorithm>
 using namespace std;
 
+vector<int> pick(11);
+vector<int> list(50001);
+bool vis[50001];
+
 int main(){
-	int N,K,i,j,t,a,b;
-	map<int,int> list;
-	multimap<int,int> ranklist;
-	cin>>N>>K;
+	int N,K,i,t;
+	scanf("%d%d",&N,&K);
 	for(i=0;i<N;i++){
-		cin>>t;
-		if(i!=0){
-			ranklist.clear();
-			for(auto iter=list.begin();iter!=list.end();iter++){
-				ranklist.insert(pair<int,int>(iter->second,iter->first));
+		while(i!=0){
+			if(vis[t]) break;
+			if(list[pick[K-1]]<list[t] || (t<pick[K-1] && list[pick[K-1]]==list[t])){
+				vis[pick[K-1]]=false;
+				pick[K-1]=t;
+				vis[t]=true;
+			}else{
+				break;
 			}
-			j=0;
-			cout<<t<<": ";
-			for(auto iter=ranklist.rbegin();iter!=ranklist.rend() && j<K;iter++,j++){
-				cout<<-iter->second;
-				if(j!=ranklist.size()-1 && j!=K-1){
-					cout<<" ";
-				}
-			}
-			cout<<endl;
+			break;
 		}
-		if(list.find(-t)==list.end()){
-			list.insert(pair<int,int>(-t,1));
-		}else{
-			list[-t]++;
+		for(int k=K-1;k>=1;k--){
+			if(list[pick[k-1]]<list[pick[k]] || (pick[k-1]>pick[k] && list[pick[k-1]]==list[pick[k]])){
+				swap(pick[k-1],pick[k]);
+			}
+		}
+		scanf("%d",&t);
+		list[t]++;
+		if(i!=0){
+			printf("%d: ",t);
+			for(int k=0;k<K;k++){
+				if(pick[k]==0) break;
+				printf("%s%d",k==0?"":" ",pick[k]);
+			}
+			printf("\n");			
 		}
 	}
 	return 0;

@@ -1,51 +1,40 @@
 #include<iostream>
 #include<string>
-#include<map>
-
+#include<vector>
+#include<algorithm>
 using namespace std;
-
 int N;
-map<int,int> rankin;
 
 int main(){
-	int i,j,num,deep,list[100010],size=0;
+	int i,j,num;
+	vector<int> list;
 	string step;
-	cin>>N;
+	scanf("%d",&N);
 	for(i=0;i<N;i++){
 		cin>>step;
 		if(step=="PeekMedian"){
-			if(size==0){
-				cout<<"Invalid"<<endl;
+			if(list.size()==0){
+				printf("Invalid\n");
 			}else{
-				if(size%2==0){
-					deep =size/2-1;
+				vector<int> ranklist;
+                ranklist.assign(list.begin(),list.end());
+				sort(ranklist.begin(),ranklist.end());
+				if(ranklist.size()%2==1){
+					printf("%d\n",ranklist[ranklist.size()/2]);
 				}else{
-					deep=size/2;
+					printf("%d\n",ranklist[ranklist.size()/2-1]);
 				}
-				auto iter=rankin.begin();
-				for(j=0;j<deep;){
-					j+=iter->second;
-					iter++;
-				}
-				cout<<iter->first<<endl;
 			}
 		}else if(step=="Push"){
-			cin>>num;
-			list[size]=num;
-			if(rankin.find(num)==rankin.end()){
-				rankin.insert(pair<int,int>(num,1));
-			}else{
-				rankin.find(num)->second++;
-			}
-			size++;
+			scanf("%d",&num);
+			list.push_back(num);
 		}
 		else if(step=="Pop"){
-			if(size==0){
-				cout<<"Invalid"<<endl;
+			if(list.size()==0){
+				printf("Invalid\n");
 			}else{
-				rankin.find(list[size-1])->second--;
-				cout<<list[size-1]<<endl;
-				size--;				
+				printf("%d\n",list[list.size()-1]);
+				list.pop_back();			
 			}
 		}
 	}

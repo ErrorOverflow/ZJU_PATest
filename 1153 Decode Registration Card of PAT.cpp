@@ -1,6 +1,7 @@
 #include<iostream>
 #include<map>
 #include<string>
+#include<unordered_map> 
 using namespace std;
 
 int main(){
@@ -42,15 +43,9 @@ int main(){
 				cout<<num<<" "<<total<<endl;
 			}
 		}else{
-			map<string,int> count;
+			unordered_map<string,int> count;
 			for(auto iter=list.begin();iter!=list.end();iter++){
-				if(iter->first.substr(4,6)==name){
-					if(count.find(iter->first.substr(1,3))==count.end()){
-						count.insert(pair<string,int>(iter->first.substr(1,3),1));
-					}else{
-						count.find(iter->first.substr(1,3))->second++;
-					}
-				}
+				if(iter->first.substr(4,6)==name) count[iter->first.substr(1,3)]++;
 			}
 			multimap<int,string> res;
 			for(auto iter=count.begin();iter!=count.end();iter++){

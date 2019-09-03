@@ -39,12 +39,12 @@ int main(){
 		bool fg1=genda[ida],fg2=genda[idb];
 		vector<int> f1,f2;
 		for(auto j=v.begin();j!=v.end();j++){
-			if(genda[*j]==fg1 && link[*j][ida]){
+			if(*j!=ida && *j!=idb && genda[*j]==fg1 && link[*j][ida]){
 				f1.push_back(*j);
 			}
 		}
 		for(auto j=v.begin();j!=v.end();j++){
-			if(genda[*j]==fg2 && link[*j][idb]){
+			if(*j!=ida && *j!=idb && genda[*j]==fg2 && link[*j][idb]){
 				f2.push_back(*j);
 			}
 		}
